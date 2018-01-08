@@ -6,9 +6,11 @@
 Project part of the ENSTA Bretagne UV 5.1 english module **"Software Development"**, aiming at creating a state of the art application.  
 A handfull of courageous young engineers with different learning profiles are merging their numerous skills towards a battleship application, a task through which they will develop their knowledge on software development, and further push their programming abilities.
 
-
 ## Content
 *Oops, this section seems to be empty !*
+
+#
+Version Alpha 1.0.0
 
 #
 Copyright © 2018 by OctoCat  
