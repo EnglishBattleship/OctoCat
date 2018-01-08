@@ -15,20 +15,7 @@ class Example(QWidget):
         grid = QGridLayout()
         grid.setSpacing(10)
         
-        x = 0
-        y = 0
-        butt='click'
-        
-        self.text = "x: {1},  y: {0}".format(x, y)
-
-        self.text2=butt
-        
-        self.label = QLabel(self.text, self)
-        grid.addWidget(self.label, 0, 0, Qt.AlignTop)
-
-        self.cliclabel= QLabel(self.text2, self)
-        grid.addWidget(self.cliclabel,30,30,Qt.AlignTop)
-        
+        self.coords=[0,0,0]        
 
         self.setMouseTracking(True)
         
@@ -39,17 +26,12 @@ class Example(QWidget):
         self.show()
         
         
-    def mouseMoveEvent(self, e):
-        
-        x = e.x()
-        y = e.y()
-        
-        text = "x: {1},  y: {0}".format(x, y)
-        self.label.setText(text)
-
     def mousePressEvent(self,e):
-        butt=e
+        self.coords=[e.x(),e.y(),e.button()]
+        #emit?
 
+    def getcoords(self):
+        return(self.coords)
     
         
 if __name__ == '__main__':
