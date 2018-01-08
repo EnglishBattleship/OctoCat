@@ -10,7 +10,7 @@ A handfull of courageous young engineers with different learning profiles are me
 *Oops, this section seems to be empty !*
 
 ### Recent Updates
-* 01/08/2018
+* Version Alpha 1.0.0 - 01/08/2018
   * We are working on it
   * Now looking up towards a Steam Greenlight !
 
