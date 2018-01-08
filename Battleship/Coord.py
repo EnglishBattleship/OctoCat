@@ -6,5 +6,5 @@ class Coord(object):
         self.x = x
         self.y = y
 
-    def getName(self):
-        return self.x + str(self.y + 1)
+    def __str__(self):
+        return "(" + str(self.x) + ", " + str(self.y) + ")"

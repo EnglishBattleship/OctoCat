@@ -1,5 +1,6 @@
 import math
 
+
 class Direction(object):
 
     RIGHT = 0
@@ -11,13 +12,4 @@ class Direction(object):
         self.direction = direction
 
     def getDirection(self):
-        if self.direction == self.RIGHT:
-            return [1,0]
-        if self.direction == self.LEFT:
-            return [-1,0]
-        if self.direction == self.UP:
-            return [0,1]
-        if self.direction == self.DOWN:
-            return [0,-1]
-        else :
-            return None
+        return [-round(math.sin(self.direction)), round(math.cos(self.direction))]

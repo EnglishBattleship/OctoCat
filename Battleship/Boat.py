@@ -1,46 +1,44 @@
-import math
-from Coord import Coord
-from Direction import Direction
+from Battleship.Coord import Coord
+from Battleship.Direction import Direction
+
 
 class Boat(object):
 
-    def __init__(self, id, name, length, coord=Coord(0,0), direction=Direction(0)):
+    def __init__(self, id, name, length, coord=Coord(0,0), direction=Direction(Direction.RIGHT)):
         self.id = id # int
         self.name = name # string
         self.length = length #int
         self.position = coord # object : the coordonates of the rear of the boat
         self.direction = direction # object
-        self.coords = self.getCoords()
-        self.squares = self.setSquares() # dict, keys : coordonates, values : 0 or 1
+        self.squares = self.initSquares() # dict, keys : coordonates, values : 0 or 1
 
     def getCoords(self):
-        Coords = [self.position]
+        coords = [self.position]
         for i in range(self.length-1):
-            Coords.append(Coord(self.position.x + (i+1)*self.direction.getDirection()[0], self.position.y + (i+1)*self.direction.getDirection()[1]))
-        return Coords
+            coords.append(Coord(self.position.x + (i+1)*self.direction.getDirection()[0], self.position.y + (i+1)*self.direction.getDirection()[1]))
+        return coords
 
-    def setSquares(self):
+    def initSquares(self):
         squares = {}
-        for i in range(len(self.coords)):
-            squares[self.coords[i]] = 0
+        for coord in self.getCoords():
+            squares[coord] = 0
         return squares
 
-    def shoot(self, cibleCoord): # cible : coordonates of the cible
-        cible = [cibleCoord.x, cibleCoord.y]
-        for x in self.squares:
-            if [x.x, x.y] == cible :
-                self.squares[x] = 1
-
+    def shoot(self, targetCoord): # target : coordonates of the target
+        target = [targetCoord.x, targetCoord.y]
+        for square in self.squares:
+            if [square.x, square.y] == target :
+                self.squares[square] = 1
 
     def isDestroyed(self):
-        for x in self.squares:
-            if self.squares[x] != 1:
+        for square in self.squares:
+            if self.squares[square] != 1:
                 return False
         return True
 
 
 if __name__ == '__main__':
-    boat = Boat(0, 'toto', 4, Coord(0,0), Direction(0))
+    boat = Boat(0, 'toto', 4, Coord(0,0), Direction(Direction.RIGHT))
     print(boat.squares)
     boat.shoot(Coord(0,0))
     boat.shoot(Coord(1, 0))
