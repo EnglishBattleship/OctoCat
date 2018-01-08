@@ -15,8 +15,9 @@ A handfull of courageous young engineers with different learning profiles are me
 * [Steam Greenlight](https://static.boredpanda.com/blog/wp-content/uploads/2017/03/58c64a00e2531_Y3ibubf__605.jpg)
 * [Kickstarter](https://i.pinimg.com/736x/88/5d/3a/885d3adb63f2260bf1a6295cfb4e9203--white-seal-sea-lions.jpg)  
 
-Battleship: The Gathering  
-Comme see us during the fan meeting at Place de Strasbourg, France, on Sunday 14th January, starting at 11:30 a.m. [UTC +1] for a community potato salad.
+### Events:
+* Battleship: The Gathering
+  Comme see us during the fan meeting at Place de Strasbourg, France, on Sunday 14th January, starting at 11:30 a.m. [UTC +1] for a community potato salad.
 
 #
 Copyright © 2018 by OctoCat  
