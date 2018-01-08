@@ -10,13 +10,9 @@ A handfull of courageous young engineers with different learning profiles are me
 *Oops, this section seems to be empty !*
 
 ### Recent Updates
-* Version Alpha 1.0.0 - 01/08/2018
+* 01/08/2018 - Version Alpha 1.0.0
   * We are working on it
   * Now looking up towards a Steam Greenlight !
-
-
-#
-Version Alpha 1.0.0
 
 #
 Copyright © 2018 by OctoCat  
