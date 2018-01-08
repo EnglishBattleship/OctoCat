@@ -12,7 +12,7 @@ A handfull of courageous young engineers with different learning profiles are me
 ### Recent Updates
 * 01/08/2018 - Version Alpha 1.0.0
   * We are working on it
-  * Now looking up towards a Steam Greenlight !
+  * Now looking towards a Steam Greenlight ! [Click here to support us](https://static.boredpanda.com/blog/wp-content/uploads/2017/03/58c64a00e2531_Y3ibubf__605.jpg)
 
 #
 Copyright © 2018 by OctoCat  
