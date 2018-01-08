@@ -13,7 +13,11 @@ A handfull of courageous young engineers with different learning profiles are me
   
 ### Support us
 * [Steam Greenlight](https://static.boredpanda.com/blog/wp-content/uploads/2017/03/58c64a00e2531_Y3ibubf__605.jpg)
-* [Kickstarter](https://i.pinimg.com/736x/88/5d/3a/885d3adb63f2260bf1a6295cfb4e9203--white-seal-sea-lions.jpg)
+* [Kickstarter](https://i.pinimg.com/736x/88/5d/3a/885d3adb63f2260bf1a6295cfb4e9203--white-seal-sea-lions.jpg)  
+
+Battleship: The Gathering  
+Comme see us during the fan meeting at Place de Strasbourg on sunday 14th January for a community potato salad !
+
 #
 Copyright © 2018 by OctoCat  
 All rigts reserved.
