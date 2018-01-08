@@ -16,7 +16,7 @@ A handfull of courageous young engineers with different learning profiles are me
 * [Kickstarter](https://i.pinimg.com/736x/88/5d/3a/885d3adb63f2260bf1a6295cfb4e9203--white-seal-sea-lions.jpg)  
 
 Battleship: The Gathering  
-Comme see us during the fan meeting at Place de Strasbourg on Sunday 14th January, starting at 11:30 a.m. (UTC+ 1) for a community potato salad !
+Comme see us during the fan meeting at Place de Strasbourg on Sunday 14th January, starting at 11:30 a.m. [UTC +1] for a community potato salad !
 
 #
 Copyright © 2018 by OctoCat  
