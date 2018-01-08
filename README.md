@@ -1,5 +1,5 @@
 # BattleShip
-*An English project at [ENSTA Bretagne](http://www.ensta-bretagne.fr/)*  
+*English project at [ENSTA Bretagne](http://www.ensta-bretagne.fr/)*  
 *[OctoCat & Co.](https://www.petsworld.in/blog/wp-content/uploads/2015/09/Cat-makes-Smile.jpg)*
 
 ### Project description
