@@ -9,7 +9,7 @@ A handfull of courageous young engineers with different learning profiles are me
 ### Content Updates
 * 01/08/2018 - Version Alpha 1.0.0
   * We are working on it
-  * Now looking towards a Steam Greenlight !
+  * Now looking towards a Steam Greenlight !  
   
 ### Support Us
 * [Steam Greenlight](https://static.boredpanda.com/blog/wp-content/uploads/2017/03/58c64a00e2531_Y3ibubf__605.jpg)
