@@ -9,9 +9,9 @@ class BottomBoard(Board):
         self.boats = dict()
         self.availableBoats = {
             0: Boat(0, "Aircraft Carrier", 5),
-            1: Boat(1, "Battleship", 4),
+            1: Boat(3, "Destroyer", 3),
             2: Boat(2, "Submarine", 3),
-            3: Boat(3, "Destroyer", 3),
+            3: Boat(1, "Battleship", 4),
             4: Boat(4, "Patrol Boat", 2)
         }
 
@@ -39,8 +39,7 @@ class BottomBoard(Board):
         if boatId not in self.availableBoats.keys():
             raise Exception("Unavailable boat")
         newBoat = self.availableBoats[boatId]
-        newBoat.position = position
-        newBoat.direction = direction
+        newBoat.replace(direction, position)
         newCoords = newBoat.getCoords()
         for boat in self.boats.values():
             coords = boat.getCoords()
