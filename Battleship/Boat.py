@@ -12,6 +12,11 @@ class Boat(object):
         self.direction = direction # object
         self.squares = self.initSquares() # dict, keys : coordonates, values : 0 or 1
 
+    def replace(self, direction, position):
+        self.direction = direction
+        self.position = position
+        self.squares = self.initSquares()
+
     def getCoords(self):
         coords = [self.position]
         for i in range(self.length-1):
@@ -25,9 +30,8 @@ class Boat(object):
         return squares
 
     def shoot(self, targetCoord): # target : coordonates of the target
-        target = [targetCoord.x, targetCoord.y]
         for square in self.squares:
-            if [square.x, square.y] == target :
+            if square == targetCoord:
                 self.squares[square] = 1
 
     def isDestroyed(self):
