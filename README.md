@@ -19,6 +19,6 @@ A handfull of courageous young engineers with different learning profiles are me
 * Battleship: The Gathering  
   Comme see us during the fan meeting at Place de Strasbourg, France, on Sunday 14th January, starting at 11:30 a.m. [UTC +1] for a community potato salad.
 
-#
+### Do You Know De Wey
 Copyright © 2018 by OctoCat  
 All rigts reserved.
