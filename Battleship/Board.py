@@ -1,4 +1,7 @@
 import numpy as np
+import random
+
+from Battleship.Coord import Coord
 
 
 class Board(object):
@@ -16,5 +19,14 @@ class Board(object):
 
     def get(self, x, y):
         return self.board[x, y]
+
+    def getFreeCoord(self):
+        coords = []
+        for x in range(self.board.shape[0]):
+            for y in range(self.board.shape[1]):
+                if self.get(x, y) == 0:
+                    coords.append(Coord(x, y))
+        rand = random.randint(0, len(coords) - 1)
+        return coords[rand]
 
 

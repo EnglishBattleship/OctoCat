@@ -40,14 +40,7 @@ class Battleship(object):
         return boards[0].availableBoats
 
     def getFreeCoord(self):
-        coords = []
-        board = self.getCurrentPlayerBoards()[1]
-        for x in range(self.boardSize):
-            for y in range(self.boardSize):
-                if board.get(x, y) == 0:
-                    coords.append(Coord(x, y))
-        rand = random.randint(0, len(coords) - 1)
-        return coords[rand]
+        return self.getCurrentPlayerBoards()[1].getFreeCoord()
 
     def botTurn(self, lastHit=None):
         result = 0
