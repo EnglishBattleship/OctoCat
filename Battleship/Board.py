@@ -11,4 +11,10 @@ class Board(object):
         self.size = size
         self.board = np.zeros((size, size))
 
+    def getCoord(self, coord):
+        return self.get(coord.x, coord.y)
+
+    def get(self, x, y):
+        return self.board[x, y]
+
 

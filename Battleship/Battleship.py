@@ -1,5 +1,8 @@
 from Battleship.TopBoard import TopBoard
 from Battleship.BottomBoard import BottomBoard
+from Battleship.Coord import Coord
+
+import random
 
 
 class Battleship(object):
@@ -23,6 +26,7 @@ class Battleship(object):
             if won:
                 print("Player {0} won !!".format(self.currentPlayer))
                 self.winner = self.currentPlayer
+        return shotResult
 
     def nextPlayer(self):
         self.currentPlayer = (self.currentPlayer % 2) + 1
@@ -34,6 +38,28 @@ class Battleship(object):
     def getAvailableBoats(self):
         boards = self.getCurrentPlayerBoards()
         return boards[0].availableBoats
+
+    def getFreeCoord(self):
+        coords = []
+        board = self.getCurrentPlayerBoards()[1]
+        for x in range(self.boardSize):
+            for y in range(self.boardSize):
+                if board.get(x, y) == 0:
+                    coords.append(Coord(x, y))
+        rand = random.randint(0, len(coords) - 1)
+        return coords[rand]
+
+    def botTurn(self, lastHit=None):
+        result = 0
+        if lastHit is not None:
+            pass
+        else:
+            freeCoord = self.getFreeCoord()
+            result = self.shoot(freeCoord)
+        if result == BottomBoard.SHOT_SUNK:
+            self.botTurn()
+        elif result == BottomBoard.SHOT_HIT:
+            self.botTurn(freeCoord)
 
     def getPlayerBoards(self, player):
         if player == 1:

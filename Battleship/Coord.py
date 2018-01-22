@@ -2,9 +2,10 @@
 
 class Coord(object):
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self, x, y, board=0):
+        self.x = int(x)
+        self.y = int(y)
+        self.board = board
 
     def __str__(self):
         return "(" + str(self.x) + ", " + str(self.y) + ")"
