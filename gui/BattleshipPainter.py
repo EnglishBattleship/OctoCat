@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPainter, QPen, QFont, QBrush
+from PyQt5.QtGui import QPainter, QPen, QFont, QBrush, QTransform
+from Battleship.Direction import Direction
 
 
 class BattleshipPainter(QPainter):
@@ -25,8 +26,12 @@ class BattleshipPainter(QPainter):
         self.setBrush(QBrush(Qt.blue))
         for boat in boats.values():
             coord = boat.getCoords()[0]
-            direction = boat.direction.getDirection()
+            direction = [abs(x) for x in boat.direction.getDirection()]
             image = boatImages[boat.length - 1]
+            if boat.direction.direction in [Direction.UP, Direction.DOWN]:
+                rm = QTransform()
+                rm.rotate(-90)
+                image = image.transformed(rm)
             image = image.scaled((1 - direction[1]) * squareSize + direction[1] * squareSize * boat.length,
                                  (1 - direction[0]) * squareSize + direction[0] * squareSize * boat.length)
             self.drawImage(x1 + coord.y * squareSize, y1 + coord.x * squareSize, image)

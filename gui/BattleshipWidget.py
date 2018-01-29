@@ -21,15 +21,15 @@ class BattleshipWidget(QWidget):
         self.initUI()
 
     def loadBoatImages(self):
-        self.boatImages = [QImage(os.getcwd() + '/gui/Destroyer_2.jpg'),
-            QImage(os.getcwd() + '/gui/Sheeps/Sheep.png'),
+        self.boatImages = [QImage(os.getcwd() + '/gui/Sheeps/Sheep.png'),
             QImage(os.getcwd() + '/gui/Sheeps/Sheep_bouee.png'),
             QImage(os.getcwd() + '/gui/Sheeps/Sheep_pedalo.png'),
-            QImage(os.getcwd() + '/gui/Sheeps/Sheep_surf.png')]
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_surf.png'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_pimp.png')]
 
     def initBattleship(self):
         self.placingBoats = True
-        self.directions = [Direction(Direction.RIGHT), Direction(Direction.DOWN), Direction(Direction.LEFT), Direction(Direction.UP)]
+        self.directions = [Direction(Direction.RIGHT), Direction(Direction.DOWN)]#, Direction(Direction.LEFT), Direction(Direction.UP)]
         self.placingDirection = 0
         self.currentBoat = None
         self.currentBotBoat=None
@@ -40,7 +40,7 @@ class BattleshipWidget(QWidget):
         self.battleship.nextPlayer()
         while len(self.battleship.getAvailableBoats().keys()) > 0:
             self.currentBotBoat = next(iter(self.battleship.getCurrentPlayerBoards()[0].getAvailableBoats().values()))            
-            self.currentBotBoat.replace(self.directions[randint(1,2)],  Coord(randint(0,9), randint(0,9)))
+            self.currentBotBoat.replace(self.directions[randint(0,1)],  Coord(randint(0,9), randint(0,9)))
             if self.currentBotBoat.isInBoard(self.battleship.boardSize):
                 self.battleship.placeBoat(self.currentBotBoat.id, self.currentBotBoat.position, self.currentBotBoat.direction)
         self.battleship.nextPlayer()
@@ -104,6 +104,7 @@ class BattleshipWidget(QWidget):
     def startBotTurn(self):
         self.battleship.botTurn()
         self.battleship.nextPlayer()
+        self.texts.append("Your turn")
         self.update()
 
     def paintEvent(self, e):
@@ -126,9 +127,10 @@ class BattleshipWidget(QWidget):
                     elif square == Board.SHOT_MISSED:
                         qp.drawMissedShot(self.getSquareRect(coord, i))
         if self.placingBoats and self.currentBoat is not None:
-            for coord in self.currentBoat.getCoords():
-                qp.setBrush(Qt.green)
-                qp.drawEllipse(self.getSquareRect(coord, 0))
+            qp.drawBoats({0: self.currentBoat}, self.boatImages, x1, y1, x2, y2, squareSize)
+            # for coord in self.currentBoat.getCoords():
+            #     qp.setBrush(Qt.green)
+            #     qp.drawEllipse(self.getSquareRect(coord, 0))
         nbTexts = len(self.texts)
         for k in range(max(0, nbTexts-1), nbTexts):
             qp.drawText(40, 20 + (nbTexts - k) * 20, self.texts[k])
