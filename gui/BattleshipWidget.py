@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QApplication, QGridLayout, QLabel
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QPainter
 from PyQt5.QtCore import QRect
+from random import randint
 
 from gui.BattleshipPainter import BattleshipPainter
 from Battleship.Coord import Coord
@@ -31,16 +32,17 @@ class BattleshipWidget(QWidget):
         self.directions = [Direction(Direction.RIGHT), Direction(Direction.DOWN), Direction(Direction.LEFT), Direction(Direction.UP)]
         self.placingDirection = 0
         self.currentBoat = None
+        self.currentBotBoat=None
         self.battleship = Battleship()
         self.placeBotBoats()
 
     def placeBotBoats(self):
         self.battleship.nextPlayer()
-        self.battleship.placeBoat(0, Coord(4, 2), Direction(Direction.DOWN))
-        self.battleship.placeBoat(1, Coord(0, 1), Direction(Direction.RIGHT))
-        self.battleship.placeBoat(2, Coord(3, 8), Direction(Direction.DOWN))
-        self.battleship.placeBoat(3, Coord(5, 4), Direction(Direction.DOWN))
-        self.battleship.placeBoat(4, Coord(2, 1), Direction(Direction.RIGHT))
+        while len(self.battleship.getAvailableBoats().keys()) > 0:
+            self.currentBotBoat = next(iter(self.battleship.getCurrentPlayerBoards()[0].getAvailableBoats().values()))            
+            self.currentBotBoat.replace(self.directions[randint(1,2)],  Coord(randint(0,9), randint(0,9)))
+            if self.currentBotBoat.isInBoard(self.battleship.boardSize):
+                self.battleship.placeBoat(self.currentBotBoat.id, self.currentBotBoat.position, self.currentBotBoat.direction)
         self.battleship.nextPlayer()
 
     def initUI(self):
