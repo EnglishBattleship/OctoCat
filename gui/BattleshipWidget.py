@@ -20,11 +20,11 @@ class BattleshipWidget(QWidget):
         self.initUI()
 
     def loadBoatImages(self):
-        self.carrier = QImage(os.getcwd() + '/Carrier_5.jpg')
-        self.battleship = QImage(os.getcwd() + '/Battleship_4.png')
-        self.cruiser = QImage(os.getcwd() + '/Cruiser_3.png')
-        self.submarine = QImage(os.getcwd() + '/Submarine_3.png')
-        self.destroyer = QImage(os.getcwd() + '/Destroyer_2.jpg')
+        self.boatImages = [QImage(os.getcwd() + '/gui/Destroyer_2.jpg'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep.png'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_bouee.png'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_pedalo.png'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_surf.png')]
 
     def initBattleship(self):
         self.placingBoats = True
@@ -44,6 +44,7 @@ class BattleshipWidget(QWidget):
         self.battleship.nextPlayer()
 
     def initUI(self):
+        self.texts = ["Place your boats"]
         self.setMouseTracking(True)
         self.setWindowTitle('Battleship')
         self.show()
@@ -58,6 +59,7 @@ class BattleshipWidget(QWidget):
             elif self.currentBoat is None:
                 self.placingBoats = False
                 self.update()
+                self.texts.append("Your turn")
                 return
             self.currentBoat.replace(self.directions[self.placingDirection], coord)
             self.update()
@@ -70,19 +72,24 @@ class BattleshipWidget(QWidget):
 
     def onMouseLeftClicked(self, e):
         coord = self.getSquareCoord(e.x(), e.y())
-        if self.placingBoats and coord is not None and coord.board == 0 and self.currentBoat.isInBoard(self.battleship.boardSize):
-            self.battleship.placeBoat(self.currentBoat.id, self.currentBoat.position, self.currentBoat.direction)
-            self.currentBoat = None
-        elif coord is not None and coord.board == 1 and self.battleship.getCurrentPlayerBoards()[1].getCoord(
-                coord) == 0:
+        if self.placingBoats:
+            if coord is not None and coord.board == 0 and self.currentBoat.isInBoard(self.battleship.boardSize):
+                self.battleship.placeBoat(self.currentBoat.id, self.currentBoat.position, self.currentBoat.direction)
+                self.currentBoat = None
+        elif coord is not None and coord.board == 1 and self.battleship.getCurrentPlayerBoards()[1].getCoord(coord) == 0:
             result = self.battleship.shoot(coord)
             self.update()
             if result == Board.SHOT_MISSED:
+                self.texts.append("You missed ! Wait for the computer to play.")
                 self.battleship.nextPlayer()
                 timer = QTimer(self)
                 timer.setSingleShot(True)
                 timer.timeout.connect(self.startBotTurn)
                 timer.start(500)
+            else:
+                self.texts.append("Well done ! You can shoot again !")
+            if self.battleship.winner is not None:
+                self.texts.append("Player {0} won !!".format(self.battleship.winner))
 
     def onMouseRightClicked(self, e):
         if self.placingBoats:
@@ -104,7 +111,8 @@ class BattleshipWidget(QWidget):
         qp.setRenderHint(QPainter.Antialiasing)
         qp.drawGrid(x1, y1, squareSize)
         qp.drawGrid(x2, y2, squareSize)
-        qp.drawBoats(self.getPlayerBoatsRect())
+        qp.drawBoats(self.battleship.getPlayerBoards(1)[0].boats, self.boatImages, x1, y1, x2, y2, squareSize)
+        # qp.drawBoatsWithRect(self.getPlayerBoatsRect(), self.boatImages)
         boards = self.battleship.getPlayerBoards(1)
         for i in range(2):
             for x in range(self.battleship.boardSize):
@@ -119,6 +127,9 @@ class BattleshipWidget(QWidget):
             for coord in self.currentBoat.getCoords():
                 qp.setBrush(Qt.green)
                 qp.drawEllipse(self.getSquareRect(coord, 0))
+        nbTexts = len(self.texts)
+        for k in range(max(0, nbTexts-1), nbTexts):
+            qp.drawText(40, 20 + (nbTexts - k) * 20, self.texts[k])
         qp.end()
 
     def getPlayerBoatsRect(self):
