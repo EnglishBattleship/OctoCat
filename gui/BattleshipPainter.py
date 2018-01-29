@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPainter, QPen, QFont, QBrush, QTransform
+from PyQt5.QtGui import QPainter, QPen, QFont, QBrush, QTransform, QColor
 from Battleship.Direction import Direction
 
 
@@ -54,5 +54,8 @@ class BattleshipPainter(QPainter):
 
     def drawHitShot(self, rect):
         self.setPen(QPen())
-        self.setBrush(QBrush(Qt.red))
-        self.drawCircle(rect)
+        color = QColor(Qt.red)
+        color.setAlpha(180)
+        brush = QBrush(color)
+        self.setBrush(brush)
+        self.drawRect(rect)
