@@ -12,6 +12,7 @@ class Battleship(object):
         self.boardsP1 = [BottomBoard(self.boardSize), TopBoard(self.boardSize)]
         self.boardsP2 = [BottomBoard(self.boardSize), TopBoard(self.boardSize)]
         self.currentPlayer = 1
+        self.lastHitP2 = None
         self.winner = None
 
     def shoot(self, coord):
@@ -42,17 +43,42 @@ class Battleship(object):
     def getFreeCoord(self):
         return self.getCurrentPlayerBoards()[1].getFreeCoord()
 
-    def botTurn(self, lastHit=None):
-        result = 0
-        if lastHit is not None:
-            pass
+    def advancedShooting(self, lastHit):
+        #print(lastHit.x, lastHit.y)
+        closestSquares = lastHit.getClosestSquares(self.boardSize)
+        potentialTargets = []
+        for coord in closestSquares:
+            if self.getPlayerBoards(1)[0].getCoord(coord) == 0:
+                potentialTargets.append(coord)
+        for c in potentialTargets:
+            print(c.x, c.y)
+        if len(potentialTargets) > 0:
+            rand = random.randint(0, len(potentialTargets)-1)
+            #print(potentialTargets[rand].x, potentialTargets[rand].y)
+            return potentialTargets[rand]
         else:
-            freeCoord = self.getFreeCoord()
-            result = self.shoot(freeCoord)
+            return None
+
+
+    def botTurn(self):
+        result = 0
+        target = None
+        if self.lastHitP2 is not None:
+            target = self.advancedShooting(self.lastHitP2)
+            if target is not None:
+                result = self.shoot(target)
+                print(target)
+        if target is None:
+            target = self.getFreeCoord()
+            result = self.shoot(target)
+            print(target)
         if result == BottomBoard.SHOT_SUNK:
+            self.lastHitP2 = None
             self.botTurn()
         elif result == BottomBoard.SHOT_HIT:
-            self.botTurn(freeCoord)
+            self.lastHitP2 = target
+            self.botTurn()
+
 
     def getPlayerBoards(self, player):
         if player == 1:
