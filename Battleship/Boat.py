@@ -23,6 +23,13 @@ class Boat(object):
             coords.append(Coord(self.position.x + (i+1)*self.direction.getDirection()[0], self.position.y + (i+1)*self.direction.getDirection()[1]))
         return coords
 
+    def isInBoard(self, boardSize):
+        coords = self.getCoords()
+        for coord in coords:
+            if 0 > coord.x or coord.x > boardSize - 1 or 0 > coord.y or coord.y > boardSize - 1:
+                return False
+        return True
+
     def initSquares(self):
         squares = {}
         for coord in self.getCoords():

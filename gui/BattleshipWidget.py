@@ -1,10 +1,11 @@
 import sys, os
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QApplication, QGridLayout, QLabel
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QPainter
 from PyQt5.QtCore import QRect
+from random import randint
 
-from BattleshipPainter import BattleshipPainter
+from gui.BattleshipPainter import BattleshipPainter
 from Battleship.Coord import Coord
 from Battleship.Battleship import Battleship
 from Battleship.Direction import Direction
@@ -13,50 +14,97 @@ from Battleship.Board import Board
 
 class BattleshipWidget(QWidget):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.loadBoatImages()
         self.initBattleship()
         self.initUI()
 
     def loadBoatImages(self):
-        self.carrier = QImage(os.getcwd() + '/Carrier_5.jpg')
-        self.battleship = QImage(os.getcwd() + '/Battleship_4.png')
-        self.cruiser = QImage(os.getcwd() + '/Cruiser_3.png')
-        self.submarine = QImage(os.getcwd() + '/Submarine_3.png')
-        self.destroyer = QImage(os.getcwd() + '/Destroyer_2.jpg')
+        self.boatImages = [QImage(os.getcwd() + '/gui/Destroyer_2.jpg'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep.png'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_bouee.png'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_pedalo.png'),
+            QImage(os.getcwd() + '/gui/Sheeps/Sheep_surf.png')]
 
     def initBattleship(self):
+        self.placingBoats = True
+        self.directions = [Direction(Direction.RIGHT), Direction(Direction.DOWN), Direction(Direction.LEFT), Direction(Direction.UP)]
+        self.placingDirection = 0
+        self.currentBoat = None
+        self.currentBotBoat=None
         self.battleship = Battleship()
-        self.battleship.placeBoat(0, Coord(4, 2), Direction(Direction.DOWN))
-        self.battleship.placeBoat(1, Coord(0, 1), Direction(Direction.RIGHT))
-        self.battleship.placeBoat(2, Coord(3, 8), Direction(Direction.DOWN))
-        self.battleship.placeBoat(3, Coord(5, 4), Direction(Direction.DOWN))
-        self.battleship.placeBoat(4, Coord(2, 1), Direction(Direction.RIGHT))
+        self.placeBotBoats()
 
+    def placeBotBoats(self):
         self.battleship.nextPlayer()
-        self.battleship.placeBoat(0, Coord(4, 2), Direction(Direction.DOWN))
-        self.battleship.placeBoat(1, Coord(0, 1), Direction(Direction.RIGHT))
-        self.battleship.placeBoat(2, Coord(3, 8), Direction(Direction.DOWN))
-        self.battleship.placeBoat(3, Coord(5, 4), Direction(Direction.DOWN))
-        self.battleship.placeBoat(4, Coord(2, 1), Direction(Direction.RIGHT))
+        while len(self.battleship.getAvailableBoats().keys()) > 0:
+            self.currentBotBoat = next(iter(self.battleship.getCurrentPlayerBoards()[0].getAvailableBoats().values()))            
+            self.currentBotBoat.replace(self.directions[randint(1,2)],  Coord(randint(0,9), randint(0,9)))
+            if self.currentBotBoat.isInBoard(self.battleship.boardSize):
+                self.battleship.placeBoat(self.currentBotBoat.id, self.currentBotBoat.position, self.currentBotBoat.direction)
         self.battleship.nextPlayer()
 
     def initUI(self):
-        self.setGeometry(100, 100, 1200, 700)
+        self.texts = ["Place your boats"]
+        self.setMouseTracking(True)
         self.setWindowTitle('Battleship')
         self.show()
 
+    def mouseMoveEvent(self, e):
+        if self.placingBoats:
+            coord = self.getSquareCoord(e.x(), e.y())
+            if coord is None or coord.board == 1:
+                return
+            if self.currentBoat is None and len(self.battleship.getAvailableBoats().keys()) > 0:
+                self.currentBoat = next(iter(self.battleship.getCurrentPlayerBoards()[0].getAvailableBoats().values()))
+            elif self.currentBoat is None:
+                self.placingBoats = False
+                self.update()
+                self.texts.append("Your turn")
+                return
+            self.currentBoat.replace(self.directions[self.placingDirection], coord)
+            self.update()
+
     def mousePressEvent(self, e):
-        x, y = e.x(), e.y()
-        coord = self.getSquareCoord(x, y)
-        if coord.board == 1:
+        if e.button() == 1:
+            self.onMouseLeftClicked(e)
+        elif e.button() == 2:
+            self.onMouseRightClicked(e)
+
+    def onMouseLeftClicked(self, e):
+        coord = self.getSquareCoord(e.x(), e.y())
+        if self.placingBoats:
+            if coord is not None and coord.board == 0 and self.currentBoat.isInBoard(self.battleship.boardSize):
+                self.battleship.placeBoat(self.currentBoat.id, self.currentBoat.position, self.currentBoat.direction)
+                self.currentBoat = None
+        elif coord is not None and coord.board == 1 and self.battleship.getCurrentPlayerBoards()[1].getCoord(coord) == 0:
             result = self.battleship.shoot(coord)
             self.update()
             if result == Board.SHOT_MISSED:
+                self.texts.append("You missed ! Wait for the computer to play.")
                 self.battleship.nextPlayer()
-                self.battleship.botTurn()
-                self.battleship.nextPlayer()
+                timer = QTimer(self)
+                timer.setSingleShot(True)
+                timer.timeout.connect(self.startBotTurn)
+                timer.start(500)
+            else:
+                self.texts.append("Well done ! You can shoot again !")
+            if self.battleship.winner is not None:
+                self.texts.append("Player {0} won !!".format(self.battleship.winner))
+
+    def onMouseRightClicked(self, e):
+        if self.placingBoats:
+            self.placingDirection = (self.placingDirection + 1) % len(self.directions)
+            if self.currentBoat is not None:
+                coord = self.getSquareCoord(e.x(), e.y())
+                self.currentBoat.replace(self.directions[self.placingDirection], coord)
+                self.update()
+
+    def startBotTurn(self):
+        self.battleship.botTurn()
+        self.battleship.nextPlayer()
+        self.update()
 
     def paintEvent(self, e):
         x1, y1, x2, y2, squareSize = self.getBoardCoords()
@@ -65,7 +113,8 @@ class BattleshipWidget(QWidget):
         qp.setRenderHint(QPainter.Antialiasing)
         qp.drawGrid(x1, y1, squareSize)
         qp.drawGrid(x2, y2, squareSize)
-        qp.drawBoats(self.getPlayerBoatsRect())
+        qp.drawBoats(self.battleship.getPlayerBoards(1)[0].boats, self.boatImages, x1, y1, x2, y2, squareSize)
+        # qp.drawBoatsWithRect(self.getPlayerBoatsRect(), self.boatImages)
         boards = self.battleship.getPlayerBoards(1)
         for i in range(2):
             for x in range(self.battleship.boardSize):
@@ -76,6 +125,13 @@ class BattleshipWidget(QWidget):
                         qp.drawHitShot(self.getSquareRect(coord, i))
                     elif square == Board.SHOT_MISSED:
                         qp.drawMissedShot(self.getSquareRect(coord, i))
+        if self.placingBoats and self.currentBoat is not None:
+            for coord in self.currentBoat.getCoords():
+                qp.setBrush(Qt.green)
+                qp.drawEllipse(self.getSquareRect(coord, 0))
+        nbTexts = len(self.texts)
+        for k in range(max(0, nbTexts-1), nbTexts):
+            qp.drawText(40, 20 + (nbTexts - k) * 20, self.texts[k])
         qp.end()
 
     def getPlayerBoatsRect(self):
@@ -102,6 +158,7 @@ class BattleshipWidget(QWidget):
             return Coord((y - y1)//squareSize, (x - x1)//squareSize, 0)
         elif x2 < x < x2 + squareSize * 10 and y2 < y < y2 + squareSize * 10:
             return Coord((y - y2) // squareSize, (x - x2) // squareSize, 1)
+        return None
 
     def getBoardCoords(self):
         width = self.width()
@@ -114,5 +171,5 @@ class BattleshipWidget(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    widget = BattleshipWidget()
+    widget = BattleshipWidget(app)
     sys.exit(app.exec_())

@@ -20,7 +20,18 @@ class BattleshipPainter(QPainter):
             self.drawText(xOffset + (k - 0.5 - 0.1 * len(str(k))) * sqSize, yOffset - 0.1 * sqSize, str(k))
             self.drawText(xOffset - 0.5 * sqSize, yOffset + (k - 0.35) * sqSize, chr(64 + k))
 
-    def drawBoats(self, boatsRect):
+    def drawBoats(self, boats, boatImages, x1, y1, x2, y2, squareSize):
+        self.setPen(QPen())
+        self.setBrush(QBrush(Qt.blue))
+        for boat in boats.values():
+            coord = boat.getCoords()[0]
+            direction = boat.direction.getDirection()
+            image = boatImages[boat.length - 1]
+            image = image.scaled((1 - direction[1]) * squareSize + direction[1] * squareSize * boat.length,
+                                 (1 - direction[0]) * squareSize + direction[0] * squareSize * boat.length)
+            self.drawImage(x1 + coord.y * squareSize, y1 + coord.x * squareSize, image)
+
+    def drawBoatsWithRect(self, boatsRect, boatImages):
         self.setPen(QPen())
         self.setBrush(QBrush(Qt.blue))
         for rect in boatsRect:
