@@ -26,6 +26,7 @@ class MainWidget(QWidget):
     def play(self):
         self.stackedWidget.setCurrentWidget(self.battleshipWidget)
         self.setGeometry(100, 100, 1200, 700)
+        self.showMaximized()
 
 
 if __name__ == "__main__":

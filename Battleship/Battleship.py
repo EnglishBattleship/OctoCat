@@ -50,8 +50,8 @@ class Battleship(object):
         for coord in closestSquares:
             if self.getPlayerBoards(1)[0].getCoord(coord) == 0:
                 potentialTargets.append(coord)
-        for c in potentialTargets:
-            print(c.x, c.y)
+        # for c in potentialTargets:
+        #     print(c.x, c.y)
         if len(potentialTargets) > 0:
             rand = random.randint(0, len(potentialTargets)-1)
             #print(potentialTargets[rand].x, potentialTargets[rand].y)
@@ -67,11 +67,11 @@ class Battleship(object):
             target = self.advancedShooting(self.lastHitP2)
             if target is not None:
                 result = self.shoot(target)
-                print(target)
+                # print(target)
         if target is None:
             target = self.getFreeCoord()
             result = self.shoot(target)
-            print(target)
+            # print(target)
         if result == BottomBoard.SHOT_SUNK:
             self.lastHitP2 = None
             self.botTurn()

@@ -89,7 +89,7 @@ class BattleshipWidget(QWidget):
                 timer.timeout.connect(self.startBotTurn)
                 timer.start(500)
             elif result == Board.SHOT_SUNK:
-                self.texts.append("Boat sunked ! Shoot again !")
+                self.texts.append("Boat sunk ! Shoot again !")
             else:
                 self.texts.append("Well done ! You can shoot again !")
             if self.battleship.winner is not None:
