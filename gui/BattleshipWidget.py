@@ -1,7 +1,7 @@
 import sys, os
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QApplication, QGridLayout, QLabel
-from PyQt5.QtGui import QIcon, QPixmap, QImage, QPainter
+from PyQt5.QtGui import QIcon, QPixmap, QImage, QPainter, QFont
 from PyQt5.QtCore import QRect
 from random import randint
 
@@ -88,6 +88,8 @@ class BattleshipWidget(QWidget):
                 timer.setSingleShot(True)
                 timer.timeout.connect(self.startBotTurn)
                 timer.start(500)
+            elif result == Board.SHOT_SUNK:
+                self.texts.append("Boat sunked ! Shoot again !")
             else:
                 self.texts.append("Well done ! You can shoot again !")
             if self.battleship.winner is not None:
@@ -115,7 +117,6 @@ class BattleshipWidget(QWidget):
         qp.drawGrid(x1, y1, squareSize)
         qp.drawGrid(x2, y2, squareSize)
         qp.drawBoats(self.battleship.getPlayerBoards(1)[0].boats, self.boatImages, x1, y1, x2, y2, squareSize)
-        # qp.drawBoatsWithRect(self.getPlayerBoatsRect(), self.boatImages)
         boards = self.battleship.getPlayerBoards(1)
         for i in range(2):
             for x in range(self.battleship.boardSize):
@@ -128,12 +129,11 @@ class BattleshipWidget(QWidget):
                         qp.drawMissedShot(self.getSquareRect(coord, i))
         if self.placingBoats and self.currentBoat is not None:
             qp.drawBoats({0: self.currentBoat}, self.boatImages, x1, y1, x2, y2, squareSize)
-            # for coord in self.currentBoat.getCoords():
-            #     qp.setBrush(Qt.green)
-            #     qp.drawEllipse(self.getSquareRect(coord, 0))
         nbTexts = len(self.texts)
+        font = QFont("Arial", 42)
+        qp.setFont(font)
         for k in range(max(0, nbTexts-1), nbTexts):
-            qp.drawText(40, 20 + (nbTexts - k) * 20, self.texts[k])
+            qp.drawText(self.width() / 2 - len(self.texts[k]) * 12,  60 + (nbTexts - k) * 20, self.texts[k])
         qp.end()
 
     def getPlayerBoatsRect(self):
